@@ -52,8 +52,8 @@ def gather_media_info(file, hash=True):
     if file_extension.lower() in ffprobe_suitable_extensions:
         file_attributes['ffprobed'] = True
 
-        json_data = ffprobe_file(file)  #data is a dictionary
-        data = json.loads(json_data)
+        json_data = ffprobe_file(file)
+        data = json.loads(json_data)    #data is a dictionary
 
         if data is not None:
 
@@ -81,12 +81,12 @@ def gather_media_info(file, hash=True):
                 for stream in data.get('streams'):
 
                     stream_data = {}
-                    stream_data['codec_type']           = stream.get('codec_type').decode("utf-8")  #if codec_type doesn't exist, the name on LHS will store None
-                    stream_data['codec_name']           = stream.get('codec_name').decode("utf-8")
-                    stream_data['codec_long_name']      = stream.get('codec_long_name').decode("utf-8")
-                    stream_data['codec_tag']            = stream.get('codec_tag').decode("utf-8")
-                    stream_data['codec_tag_string']     = stream.get('codec_tag_string').decode("utf-8")
-                    stream_data['codec_time_base']      = stream.get('codec_time_base').decode("utf-8")
+                    stream_data['codec_type']           = stream.get('codec_type').decode("utf-8") if stream.get('codec_type') else stream.get('codec_type')
+                    stream_data['codec_name']           = stream.get('codec_name').decode("utf-8") if stream.get('codec_name') else stream.get('codec_name')
+                    stream_data['codec_long_name']      = stream.get('codec_long_name').decode("utf-8") if stream.get('codec_long_name') else stream.get('codec_long_name')
+                    stream_data['codec_tag']            = stream.get('codec_tag').decode("utf-8") if stream.get('codec_tag') else stream.get('codec_tag')
+                    stream_data['codec_tag_string']     = stream.get('codec_tag_string').decode("utf-8") if stream.get('codec_tag_string') else stream.get('codec_tag_string')
+                    stream_data['codec_time_base']      = stream.get('codec_time_base').decode("utf-8") if stream.get('codec_time_base') else stream.get('codec_time_base')
 
                     stream_data['avg_frame_rate']       = stream.get('avg_frame_rate')
 
@@ -180,3 +180,8 @@ def ffprobe_file(file):
         logger.error(error)
     return output
 
+def view_ffprobe_output_as_dict(file):
+    json_data = ffprobe_file(file)
+    data = json.loads(json_data)
+    pprint(data)
+    return data
