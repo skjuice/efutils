@@ -81,7 +81,7 @@ def gather_media_info(file, hash=True):
                 for stream in data.get('streams'):
 
                     stream_data = {}
-                    stream_data['codec_type']           = stream.get('codec_type').decode("utf-8") if stream.get('codec_type') else stream.get('codec_type')
+                    stream_data['codec_type']           = stream.get('codec_type').decode("utf-8") if stream.get('codec_type') else stream.get('codec_type')    #ternary stmt in python
                     stream_data['codec_name']           = stream.get('codec_name').decode("utf-8") if stream.get('codec_name') else stream.get('codec_name')
                     stream_data['codec_long_name']      = stream.get('codec_long_name').decode("utf-8") if stream.get('codec_long_name') else stream.get('codec_long_name')
                     stream_data['codec_tag']            = stream.get('codec_tag').decode("utf-8") if stream.get('codec_tag') else stream.get('codec_tag')
