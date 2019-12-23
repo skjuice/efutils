@@ -58,9 +58,9 @@ class Sthree:
             self.logger.error(e.response['Error']['Message'])
             return False
 
-    def check_resource_exists_at_key(self, key):
+    def check_resource_exists_at_key(self, bucket, key):
         try:
-            self.client.head_object(Bucket=self.bucket_name, Key=key)
+            self.client.head_object(Bucket=bucket, Key=key)
             return True
         except ClientError:
             # Not found
