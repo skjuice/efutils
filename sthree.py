@@ -4,6 +4,8 @@ import logging
 
 """
 Give a filepath and it will upload to the bucket
+S3 URI:
+    s3://<bucket-name>/<key>
 """
 
 class Sthree:

@@ -6,14 +6,20 @@ formatter = logging.Formatter('%(asctime)s,%(msecs)d %(levelname)-8s [%(filename
 def setup_logger(name, log_file, stdout=False, level=logging.INFO):
     """To setup as many loggers as you want"""
 
+    if name == 'root':
+        logger = logging.getLogger()
+    else:
+        logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
+    file_handler.setLevel(logging.DEBUG)
 
     if stdout is True:
         stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setLevel(logging.INFO)
 
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
     logger.addHandler(file_handler)
     if stdout is True:
         logger.addHandler(stream_handler)
