@@ -54,10 +54,10 @@ def gather_media_info(file, hash=False):
 
     # If file size is less than the defined size for running checksum on, then hash it
     if shouldHashBasedOnFileSize(file):
-        file_attributes['md5'] = fileio.md5(file)
+        file_attributes['md5'] = fs_utils.md5(file)
     else:
         if hash is True:
-            file_attributes['md5'] = fileio.md5(file)
+            file_attributes['md5'] = fs_utils.md5(file)
         else:
             file_attributes['md5'] = None
 
