@@ -57,7 +57,7 @@ def hash_file(file):
         exit_code, md5_binary_path = execute_cmd('which md5sum')
 
     if exit_code == 0:
-        exit_code, output = execute_cmd(f'{md5_binary_path} {file}')
+        exit_code, output = execute_cmd(f"{md5_binary_path} '{file}'")
         if exit_code == 0:
             # print(output)
             # md5sum gives output like so:
