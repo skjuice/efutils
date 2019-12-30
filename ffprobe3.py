@@ -2,10 +2,11 @@
 # above is to fix the error syntaxError: Non-ASCII character '\xc2' in file audit.py on line n
 
 import os
-import fs_utils
 import sys
 import subprocess
 import logging
+from subprocess_helpers import hash_file
+import hashlib
 import shlex
 #import ushlex
 import json
@@ -54,10 +55,10 @@ def gather_media_info(file, hash=False):
 
     # If file size is less than the defined size for running checksum on, then hash it
     if shouldHashBasedOnFileSize(file):
-        file_attributes['md5'] = fs_utils.md5(file)
+        file_attributes['md5'] = hash_file(file)
     else:
         if hash is True:
-            file_attributes['md5'] = fs_utils.md5(file)
+            file_attributes['md5'] = hash_file(file)
         else:
             file_attributes['md5'] = None
 
