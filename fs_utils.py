@@ -12,6 +12,7 @@ import string
 import fnmatch
 import shutil
 import json
+from pathlib import Path
 from pprint import pprint
 
 logger = logging.getLogger(__name__)
@@ -100,9 +101,15 @@ def get_files_in_dir_recursively(path):
     return matches
 
 
-def get_files_recursively(path):
-    pass
-
+def get_files_recursively_in_path(path):
+    files = []
+    p = Path(path)
+    # for i in p.glob('**/*'):  #this works as well
+    for i in p.rglob("*"):
+        files.append(str(i))    # i is PosixPath object
+        #print(i.name)   # DORA_AND_THE_CITY_OF_LOST_GOLD_20191030.xml
+        #print(i)    # /Users/john/Downloads/temp/generatedXMLs/DORA_AND_THE_CITY_OF_LOST_GOLD_20191030.xml
+    return files
 
 def get_files_in_dir_recursively2(path, **kwargs):
     """
