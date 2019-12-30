@@ -48,7 +48,7 @@ def execute_cmd(cmd):
     except subprocess.CalledProcessError as e:
         exitcode, err = e.returncode, e.output
         # print(exitcode)
-        # print(err)
+        # print(err) #coming out as empty string
         return exitcode, err
 
 def hash_file(file):
@@ -59,7 +59,11 @@ def hash_file(file):
     if exit_code == 0:
         exit_code, output = execute_cmd(f'{md5_binary_path} {file}')
         if exit_code == 0:
-            print(output)
+            # print(output)
+            # md5sum gives output like so:
+            #   3fd531a2f0c9693f5a559a831eb4f993  /Volumes/Megatron/__VS_Ingest/Ingest_Manual/ANE_TV_5692_ASP27972_StorageWars_AEID75291_CC.scc
+            # md5 on mac gives output like so:
+            #   MD5 (/Users/sharadku/Downloads/temp/meta-PMRS1354250-818509-VOD_1_1_HAPL_1574457166.xml) = 8d8b26d9107127e00a776e5c36beb3df
             if '=' in output:
                 return output.rpartition('=')[2].strip()
             else:
