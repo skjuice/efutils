@@ -5,7 +5,7 @@ import os
 import sys
 import subprocess
 import logging
-from subprocess_helpers import hash_file
+from efutils.subprocess_helpers import hash_file
 import hashlib
 import shlex
 #import ushlex
