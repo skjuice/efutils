@@ -2,7 +2,7 @@
 # above is to fix the error syntaxError: Non-ASCII character '\xc2' in file audit.py on line n
 
 import os
-import fileio
+import fs_utils
 import sys
 import subprocess
 import logging
