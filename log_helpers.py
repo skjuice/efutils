@@ -10,11 +10,11 @@ def setup_logger(name, log_file, stdout=False, level=logging.INFO):
         logger = logging.getLogger()
     else:
         logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(level)
 
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.DEBUG)
+    file_handler.setLevel(level)
 
     if stdout is True:
         stream_handler = logging.StreamHandler(sys.stdout)
