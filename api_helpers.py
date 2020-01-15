@@ -120,9 +120,9 @@ def call2(data, **kwargs):
 
     headers = {'Authorization': 'Bearer ' + api_token, "Content-Type": "application/json"}
     try:
-        if method is 'post':
+        if method == 'post':
             response = requests.post(url, data=json.dumps(data), headers=headers)
-        elif method is 'put':
+        elif method == 'put':
             response = requests.put(url, data=json.dumps(data), headers=headers)
 
         if 'return_http_status' in kwargs:
@@ -171,9 +171,9 @@ def call3(url, data, headers, **kwargs):
 
     #headers = {'Authorization': 'Bearer ' + api_token, "Content-Type": "application/json"} #now comming in as function argument
     try:
-        if method is 'post':
+        if method == 'post':
             response = requests.post(url, data=json.dumps(data), headers=headers)
-        elif method is 'put':
+        elif method == 'put':
             response = requests.put(url, data=json.dumps(data), headers=headers)
 
         if 'return_http_status' in kwargs:
@@ -218,12 +218,12 @@ def call4(url, data, headers, **kwargs):
 
     #headers = {'Authorization': 'Bearer ' + api_token, 'Content-Type': 'application/json', 'Accept': 'application/json'} #now comming in as function argument
     try:
-        if method is 'post':
+        if method == 'post':
             #response = requests.post(url, data=json.dumps(data), headers=headers)
             #below because some value in data might not be string/int. Example error: TypeError: Object of type datetime is not JSON serializable
             response = requests.post(url, data=json.dumps(data, indent = 4, sort_keys = True, default = str), headers=headers)
 
-        elif method is 'put':
+        elif method == 'put':
             response = requests.put(url, data=json.dumps(data, indent = 4, sort_keys = True, default = str), headers=headers)
 
         data = {}

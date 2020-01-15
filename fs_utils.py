@@ -320,10 +320,10 @@ def get_filename_from_full_file_path(filepath, return_type=None):
     """
     base = os.path.basename(filepath)
 
-    if return_type is 'filename_only':
+    if return_type == 'filename_only':
         filename_without_ext = os.path.splitext(base)[0]
         return filename_without_ext
-    elif return_type is 'extension_only':
+    elif return_type == 'extension_only':
         extension = os.path.splitext(base)[1]
         return extension.strip('.').lower()
     else:
@@ -372,7 +372,7 @@ def get_file_extension(file):
 
 
 def is_json_file(file):
-    return get_file_extension(file) is 'json'
+    return get_file_extension(file) == 'json'
 
 
 def get_unique_timestamped_string():
