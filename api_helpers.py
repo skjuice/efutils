@@ -221,10 +221,10 @@ def call4(url, data, headers, **kwargs):
         if method == 'post':
             #response = requests.post(url, data=json.dumps(data), headers=headers)
             #below because some value in data might not be string/int. Example error: TypeError: Object of type datetime is not JSON serializable
-            response = requests.post(url, data=json.dumps(data, indent = 4, sort_keys = True, default = str), headers=headers)
+            response = requests.post(url, data=json.dumps(data, indent=4, sort_keys=True, default=str), headers=headers)
 
         elif method == 'put':
-            response = requests.put(url, data=json.dumps(data, indent = 4, sort_keys = True, default = str), headers=headers)
+            response = requests.put(url, data=json.dumps(data, indent=4, sort_keys=True, default=str), headers=headers)
 
         data = {}
         data['response_raw_bytes'] = response.content

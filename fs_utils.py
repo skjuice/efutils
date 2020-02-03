@@ -403,6 +403,40 @@ def touch(path):
         os.utime(path, None)
 
 
+def get_all_dirs_in_path(path, recursive=False):
+    '''
+    This will fetch dirs recursively that are in the path
+    Path.glob(pattern)
+    The “**” pattern means “this directory and all subdirectories, recursively”. In other words, it enables recursive globbing
+
+    Path.rglob(pattern)
+    This is like calling Path.glob() with “**/” added in front of the given relative pattern. Example:
+    sorted(Path().rglob("*.py"))
+    :param path:
+    :return: return a list of PosixPath objects
+    '''
+    if recursive is True:
+        p = Path(path).glob('**/*')
+    else:
+        p = Path(path).glob('*')
+    # folders whose name ends in certain pattern: [x for x in p if x.is_dir() and str(x).endswith('_CBT')]
+    folders = [x for x in p if x.is_dir()]
+    return folders
+
+def get_all_files_in_path(path, recursive=False):
+    '''
+    This will fetch all files recursively that are in the path
+    :param path:
+    :return: return a list of PosixPath objects
+    '''
+    if recursive is True:
+        # if you wanted only mov files, you could do: Path(path).glob('**/*.mov')
+        p = Path(path).glob('**/*')
+    else:
+        p = Path(path).glob('*')
+    files = [x for x in p if x.is_file()]
+    return files
+
 """
 
 john01-mac:~/Downloads/sample_audio_video_scc_files$ tree -ifpugDsa $PWD
