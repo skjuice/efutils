@@ -76,7 +76,7 @@ def get3(url, headers, **kwargs):
         return response.status_code, data
     except requests.exceptions.RequestException as e:
         logger.error(e)
-        return 0
+        return None, None
 
 def call(data):
     """SEND DATA TO API ENDPOINT
