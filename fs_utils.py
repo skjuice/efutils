@@ -437,6 +437,46 @@ def get_all_files_in_path(path, recursive=False):
     files = [x for x in p if x.is_file()]
     return files
 
+
+def get_partition_stats(partition: str):
+    """
+    
+    :param partition: 
+    :return: (total_bytes, used_bytes, free_bytes)
+    """
+    try:
+        return shutil.disk_usage(partition)
+    except FileNotFoundError:
+        return False
+
+def get_partition_status_in_units(partition, unit):
+    """
+    
+    :param partition: 
+    :param unit: MB/GB/TB/PB
+    :return: 
+    """
+    res = get_partition_stats(partition)    # res will be a tuple: (total, used, free)
+    if isinstance(res, tuple):
+        if unit == 'TB':
+            factor = 40
+        elif unit == 'PB':
+            factor = 50
+        else:
+            factor = 30     # GB
+
+        return map(lambda x: x // (2 ** factor), res)
+
+
+def get_percent_free_space_on_partition(partition):
+    res = get_partition_stats(partition)
+    if isinstance(res, tuple):
+        total, used, free = res
+        return (free / total) * 100
+
+    return None
+
+
 """
 
 john01-mac:~/Downloads/sample_audio_video_scc_files$ tree -ifpugDsa $PWD
