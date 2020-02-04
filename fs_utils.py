@@ -345,7 +345,9 @@ def md5(absolute_file_path):
 
 
 def md5_2(absolute_file_path):
-    "Sometimes you won't be able to fit the whole file in memory. In that case, you'll have to read chunks of 4096 bytes sequentially and feed them to the Md5 function"
+    """Sometimes you won't be able to fit the whole file in memory. In that case, you'll have to read chunks of
+    4096 bytes sequentially and feed them to the Md5 function
+    """
     hash_md5 = hashlib.md5()
     with open(absolute_file_path, "r") as f:
         for chunk in iter(lambda: f.read(4096), b""):
@@ -381,11 +383,11 @@ def get_unique_timestamped_string():
 
 
 def convert_json_file_to_dictionary(file):
-    '''
+    """
     Great for converting config.json to dict
     :param file:
     :return:
-    '''
+    """
     config = None
     with open(file) as json_data_file:
         config = json.load(json_data_file)  # config is a dictionary now
@@ -404,7 +406,7 @@ def touch(path):
 
 
 def get_all_dirs_in_path(path, recursive=False):
-    '''
+    """
     This will fetch dirs recursively that are in the path
     Path.glob(pattern)
     The “**” pattern means “this directory and all subdirectories, recursively”. In other words, it enables recursive globbing
@@ -413,8 +415,9 @@ def get_all_dirs_in_path(path, recursive=False):
     This is like calling Path.glob() with “**/” added in front of the given relative pattern. Example:
     sorted(Path().rglob("*.py"))
     :param path:
+    :param recursive:
     :return: return a list of PosixPath objects
-    '''
+    """
     if recursive is True:
         p = Path(path).glob('**/*')
     else:
@@ -423,12 +426,13 @@ def get_all_dirs_in_path(path, recursive=False):
     folders = [x for x in p if x.is_dir()]
     return folders
 
+
 def get_all_files_in_path(path, recursive=False):
-    '''
+    """
     This will fetch all files recursively that are in the path
     :param path:
     :return: return a list of PosixPath objects
-    '''
+    """
     if recursive is True:
         # if you wanted only mov files, you could do: Path(path).glob('**/*.mov')
         p = Path(path).glob('**/*')
@@ -448,6 +452,7 @@ def get_partition_stats(partition: str):
         return shutil.disk_usage(partition)
     except FileNotFoundError:
         return False
+
 
 def get_partition_status_in_units(partition, unit):
     """
