@@ -51,6 +51,18 @@ def execute_cmd(cmd):
         # print(err) #coming out as empty string
         return exitcode, err
 
+def execute_cmd2(cmd, cwd=None):
+    try:
+        if cwd:
+            out = subprocess.run(cmd, shell=True, check=True, cwd=cwd)
+        else:
+            out = subprocess.run(cmd, shell=True, check=True)
+        # print(out.strip())  # strip \n
+        return 0, None
+    except subprocess.CalledProcessError as e:
+        exitcode, err = e.returncode, e.output
+        return exitcode, err
+
 def hash_file(file):
     exit_code, md5_binary_path = execute_cmd('which md5')
     if exit_code != 0:
