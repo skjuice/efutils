@@ -32,8 +32,13 @@ def get_ffprobe_binary_location():
 
 # for python3, no encoding/decoding bullshit
 def gather_media_info(file, hash=False):
-    """file argument needs to be the absolute path to a file"""
-    #pprint(type(file))  # <class 'str'>
+    """
+    Analyses various file attributes and puts them into a dict
+    Runs file through ffprobe to collect technical data on file
+    :param file: absolute file path on the filesystem
+    :param hash: boolean
+    :return: dictionary called file_attributes
+    """
 
     file_attributes = {}
     duration = None
@@ -141,7 +146,7 @@ def gather_media_info(file, hash=False):
                         audio_track_count = audio_track_count + 1
 
                     if stream.get('codec_type') == 'audio' and stream.get('channels'):
-                        audio_channel_count                        = audio_channel_count + int(stream.get('channels'))
+                        audio_channel_count = audio_channel_count + int(stream.get('channels'))
 
                     if stream.get('tags') and stream.get('tags').get('handler_name'):
                         stream_data['handler_name']     = stream.get('tags').get('handler_name')
@@ -171,8 +176,6 @@ def ffprobe_file(file):
 
         # this below gives this error: TypeError: can only concatenate str (not "bytes") to str
         #cmd = ffprobe_path + ' "' + file.encode(locale.getpreferredencoding()) + '"' + " -v quiet -show_streams -show_format -print_format json"
-
-
 
         #result = subprocess.run([ffprobe_path, file, '-v', 'quiet', '-show_streams', '-show_format', '-print_format', 'json'], stdout=subprocess.PIPE)
 

@@ -442,6 +442,18 @@ def get_all_files_in_path(path, recursive=False):
     return files
 
 
+def clean_dir_if_no_files_within(dir):
+    p = Path(dir).glob('**/*')
+    files = [x for x in p if x.is_file()]
+    # ignore hidden files
+    files = [file for file in files if not file.name.startswith('.')]
+    if len(files) == 0:
+        # safe to delete all empty directory trees inside
+        for path in p:
+            if path.is_dir():
+                shutil.rmtree(path)
+
+
 def get_partition_stats(partition: str):
     """
     
