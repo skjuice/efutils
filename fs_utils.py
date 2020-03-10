@@ -494,6 +494,17 @@ def get_percent_free_space_on_partition(partition):
     return None
 
 
+def tag_file_with_identifier(file: str, id_string: str, tagging_location) -> str:
+    containing_path, sep, filename = file.rpartition('/')
+
+    if tagging_location is None:
+        return file
+    elif tagging_location == 'prefix':
+        return f"{containing_path}/{id_string}_{filename}"
+    elif tagging_location == 'suffix':
+        filename_without_ext, sep, ext = filename.rpartition('.')
+        return f"{containing_path}/{filename_without_ext}_{id_string}.{ext}"
+
 """
 
 john01-mac:~/Downloads/sample_audio_video_scc_files$ tree -ifpugDsa $PWD
