@@ -60,6 +60,8 @@ def execute_cmd2(cmd, cwd=None):
         # print(out.strip())  # strip \n
         return 0, None
     except subprocess.CalledProcessError as e:
+        # print(e.stdout)  # will be none if capture_output=True is not passed to run()
+        # print(e.stderr)  # will be none if capture_output=True is not passed to run()
         exitcode, err = e.returncode, e.output
         return exitcode, err
 

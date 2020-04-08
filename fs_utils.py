@@ -442,6 +442,11 @@ def get_all_files_in_path(path, recursive=False):
     return files
 
 
+def get_non_hidden_files_of_certain_types_at_root_of_path(path):
+    """non-recursively"""
+    return [x for x in Path(path).glob('*') if x.is_file() and not x.name.startswith('.') and x.suffix in [".csv", ".xls", ".xlsx", ".xml"]]
+
+
 def clean_dir_if_no_files_within(dir):
     p = Path(dir).glob('**/*')
     files = [x for x in p if x.is_file()]

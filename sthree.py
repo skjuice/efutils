@@ -8,6 +8,10 @@ S3 URI:
     s3://<bucket-name>/<key>
 """
 
+class FileDownloadException(Exception):
+    pass
+
+
 class Sthree:
 
     def __init__(self, access_key_id, secret, bucket=None):
@@ -60,6 +64,17 @@ class Sthree:
             self.logger.error(e.response['Error']['Message'])
             return False
 
+    def download3(self, **kwargs):
+        '''This method is a better approach as you're not required to instantiate this class with a bucket name'''
+        if 'file' not in kwargs or 'bucket' not in kwargs or 'key' not in kwargs:
+            raise ValueError('file, bucket and key are mandatory arguments')
+        try:
+            bucket = self.s3_resource.Bucket(name=kwargs.get('bucket'))
+            bucket.download_file(kwargs.get('key'), kwargs.get('file'))
+            return kwargs.get('file')
+        except ClientError as e:
+            raise FileDownloadException(f"Error download s3 object at key {kwargs.get('key')}: {e}")
+
     def check_resource_exists_at_key(self, bucket, key):
         try:
             self.client.head_object(Bucket=bucket, Key=key)
@@ -67,3 +82,31 @@ class Sthree:
         except ClientError:
             # Not found
             return False
+
+    def get_bucket_key(self, uri):
+        """
+        Parses s3 uri to extract bucket and key, so object can be transacted via API
+        :param uri:
+        :return: tuple of bucket and key
+        """
+        if uri.startswith('s3://'):
+            s3_path = uri.lstrip('s3://')
+            bucket = s3_path.partition('/')[0]
+            key = s3_path.partition('/')[2]
+            return bucket, key
+        elif uri.startswith('https://s3'):
+            s3_path = uri.lstrip('https://s3.ca-central-1.amazonaws.com/')
+            bucket = s3_path.partition('/')[0]
+            key = s3_path.partition('/')[2]
+            return bucket, key
+
+    def download_s3object(self, uri, target_path):
+        bucket, key = self.get_bucket_key(uri)
+        try:
+            file = self.download3(bucket=bucket, key=key, file=target_path)
+
+        except ValueError as e:
+            pass
+
+        except FileDownloadException as e:
+            raise FileDownloadException(f"ERROR downloading object identified by s3_key {key} to {target_path}") from e
