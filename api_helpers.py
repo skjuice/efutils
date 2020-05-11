@@ -3,6 +3,10 @@ import requests
 import json
 from pprint import pprint
 
+class ApiServerException(Exception):
+    pass
+
+
 api_url = None
 logger = logging.getLogger(__name__)
 
@@ -249,6 +253,56 @@ def call4(url, data, headers, **kwargs):
         # catastrophic error. bail.
         logger.error(e)
         return False
+
+
+def call5(url, data, headers, **kwargs):
+    """SEND POST (or other HTTP VERB) TO API ENDPOINT
+        data signature:
+        an array of elements where first element is for general-data and all other elements are for files (each one for ONE file)
+        parses returned json into dictionary if possible
+
+        If a POST call is to be made to an endpoint with no data, the second parameter can be empty string ''
+
+    """
+    if 'method' in kwargs:
+        method = kwargs.get('method')
+    else:
+        method = 'post'
+
+    try:
+        if method.lower() == 'get':
+            response = requests.get(url, headers=headers)
+
+        elif method.lower() == 'post':
+            #response = requests.post(url, data=json.dumps(data), headers=headers)
+            #below because some value in data might not be string/int. Example error: TypeError: Object of type datetime is not JSON serializable
+            response = requests.post(url, data=json.dumps(data, indent=4, sort_keys=True, default=str), headers=headers)
+
+        elif method.lower() == 'put':
+            response = requests.put(url, data=json.dumps(data, indent=4, sort_keys=True, default=str), headers=headers)
+
+        if response.status_code == 401:
+            raise ApiServerException('Unauthorized')
+        elif response.status_code == 500:
+            raise ApiServerException('API Server returned HTTP status code 500')
+
+        data = {}
+        data['response_raw_bytes'] = response.content
+        try:
+            data['response_dict'] = response.json()   # trying to load json string into dictionary
+        except ValueError:
+            data['response_dict'] = None
+            data['response_text_string'] = response.text
+
+        data['status_code'] = response.status_code
+
+        return data
+    except requests.exceptions.Timeout:
+        raise
+    except requests.exceptions.TooManyRedirects:
+        raise
+    except requests.exceptions.RequestException as e:
+        raise
 
 
 def log_response(response):
