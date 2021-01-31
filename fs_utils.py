@@ -8,6 +8,7 @@ import logging
 import hashlib
 import time
 import random
+import subprocess
 import string
 import fnmatch
 import shutil
@@ -234,6 +235,18 @@ def rename_file_with_prefix(file, prefix):
     return new_filepath
 
 
+def rename_file_with_prefix2(file, prefix):
+    p = Path(file)
+    if p.exists():
+        p.rename(Path(p.parent, f"{prefix}_{p.stem}{p.suffix}"))
+
+
+def suffix_file_with_prefix2(file, suffix):
+    p = Path(file)
+    if p.exists():
+        p.rename(Path(p.parent, f"{p.stem}_{suffix}{p.suffix}"))
+
+
 def rename_file_with_suffix(file, suffix):
     """
     Do not throw any error, python will throw its own error if this fails. Just catch and handle in the calling function
@@ -353,6 +366,37 @@ def md5_2(absolute_file_path):
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
+
+
+def execute_cmd(cmd):
+    try:
+        out = subprocess.check_output(cmd, shell=True, text=True)
+        # print(out.strip())  # strip \n
+        return 0, out.strip()
+    except subprocess.CalledProcessError as e:
+        exitcode, err = e.returncode, e.output
+        # print(exitcode)
+        # print(err) #coming out as empty string
+        return exitcode, err
+
+
+def hash_file(file):
+    exit_code, md5_binary_path = execute_cmd('which md5')
+    if exit_code != 0:
+        exit_code, md5_binary_path = execute_cmd('which md5sum')
+
+    if exit_code == 0:
+        exit_code, output = execute_cmd(f"{md5_binary_path} '{file}'")
+        if exit_code == 0:
+            # print(output)
+            # md5sum gives output like so:
+            #   3fd531a2f0c9693f5a559a831eb4f993  /Volumes/Megatron/__VS_Ingest/Ingest_Manual/ANE_TV_5692_ASP27972_StorageWars_AEID75291_CC.scc
+            # md5 on mac gives output like so:
+            #   MD5 (/Users/xxxx/Downloads/temp/meta-PMRS1354250-818509-VOD_1_1_HAPL_1574457166.xml) = 8d8b26d9107127e00a776e5c36beb3df
+            if '=' in output:
+                return output.rpartition('=')[2].strip()
+            else:
+                return output.partition(' ')[0].strip()
 
 
 def get_file_category(file_extension):
